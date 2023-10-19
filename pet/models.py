@@ -1,5 +1,7 @@
 from django.db import models
 
+from account.models import Tutor
+
 
 class Shelter(models.Model):
     name = models.CharField(
@@ -46,6 +48,16 @@ class Pet(models.Model):
     shelter = models.ForeignKey(
         Shelter,
         on_delete=models.CASCADE
+    )
+    adopted = models.BooleanField(
+        default=False,
+    )
+    tutor = models.ForeignKey(
+        Tutor,
+        on_delete=models.CASCADE,
+        related_name='pets',
+        blank=True,
+        null=True
     )
 
     def __str__(self):

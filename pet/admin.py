@@ -5,8 +5,8 @@ from .models import Pet, Shelter
 
 @admin.register(Pet)
 class PetAdmin(admin.ModelAdmin):
-    list_display = ['name', 'age', 'shelter']
-    list_filter = ['name']
+    list_display = ['name', 'age', 'adopted', 'shelter']
+    list_filter = ['name', 'adopted']
 
     def __str__(self):
         return self.name

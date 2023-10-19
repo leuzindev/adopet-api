@@ -125,3 +125,38 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            super().save(*args, **kwargs)
+
+            if self.role == self.TUTOR:
+                Tutor.objects.create(user=self)
+            elif self.role == self.ORG:
+                Organization.objects.create(user=self)
+        else:
+            old_role = User.objects.get(pk=self.pk).role
+
+            if self.role != old_role:
+                if old_role == self.TUTOR:
+                    self.tutor.delete()
+                    Organization.objects.create(user=self)
+                elif old_role == self.ORG:
+                    self.organization.delete()
+                    Tutor.objects.create(user=self)
+
+            super().save(*args, **kwargs)
+
+
+class Tutor(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+
+
+class Organization(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )

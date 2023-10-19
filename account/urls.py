@@ -10,6 +10,7 @@ urlpatterns = [
     path('accounts/<int:pk>', UserViewSet.as_view({
         'get': 'retrieve',
         'put': 'update',
+        'patch': 'partial_update',
         'delete': 'destroy'
     }))
 ]
